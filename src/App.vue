@@ -1,21 +1,21 @@
 <template>
   <div id="app">
     <div class="header">
-      <h1>Todo List</h1>
+      <div>
+        <h1>Todo</h1>
+      </div>
     </div>
-    <div class="flex">
-      <Search @onSearchChange="onSearchChange"/>
-      <List
-        :list="filteredList"
-        :priority="priority"
-        :sort="currentSort"
-        @onAddNewItem="addNewItem"
-        @onEditItem="editItem"
-        @onRemoveItem="removeItem"
-        @onClearAll="clearAll"
-        @onToggleSort="toggleSort"
-      />
-    </div>
+    <Search @onSearchChange="onSearchChange"/>
+    <List
+      :list="filteredList"
+      :priority="priority"
+      :sort="currentSort"
+      @onAddNewItem="addNewItem"
+      @onEditItem="editItem"
+      @onRemoveItem="removeItem"
+      @onClearAll="clearAll"
+      @onToggleSort="toggleSort"
+    />
   </div>
 </template>
 
@@ -81,6 +81,7 @@ export default {
       let listItem = list.findIndex(i => i.id === item.id);
       list[listItem] = item;
       this.setList(list);
+      this.setSort(this.currentSort);
     },
     setNextUniqueId(val) {
       this.nextUniqueId = val;
@@ -128,6 +129,7 @@ export default {
     this.incrementNextUniqueId();
 
     this.setList(list);
+    this.setSort(this.currentSort);
   }
 }
 </script>
@@ -142,7 +144,7 @@ body {
   color: #2c3e50;
   margin: 0;
   padding: 40px;
-  background: #b2bec3;
+  background: whitesmoke;
 }
 #app{
   margin: 0 auto;
@@ -155,5 +157,15 @@ a {
 }
 input{
   font-family: 'Raleway', sans-serif;
+}
+.header{
+  display: flex;
+  justify-content: center;
+  div{
+    display: flex;
+    max-width: 960px;
+    width: 100%;
+    margin: 0 auto;
+  }
 }
 </style>

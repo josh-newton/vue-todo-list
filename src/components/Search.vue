@@ -1,9 +1,11 @@
 <template>
   <div class="search">
-    <label>
-      <i class="fas fa-search"></i>
-      <input type="text" v-model="query" @keyup="$emit('onSearchChange', query)" placeholder="Search...">
-    </label>
+    <div>
+      <label>
+        <i class="fas fa-search"></i>
+        <input type="text" v-model="query" @keyup="$emit('onSearchChange', query)" placeholder="Search...">
+      </label>
+    </div>
   </div>
 </template>
 
@@ -22,13 +24,17 @@ export default {
 <style scoped lang="scss">
 .search{
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   margin-bottom: 30px;
 }
-label{
+div{
   display: flex;
-  align-items: center;
-
+  justify-content: flex-end;
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+}
+label{
   i{
     margin-right: 10px;
   }
@@ -37,6 +43,7 @@ label{
     border-radius: 4px;
     border: none;
     font-size: 14px;
+    border: 1px solid #eaeaea;
   }
 }
 </style>

@@ -26,11 +26,11 @@
 
         <tr v-for="item in list" :key="item.id">
           <td class="text">
-            <input type="text" v-model="item.text" @keyup="$emit('onEditItem', item)">
+            <input type="text" v-model="item.text" @keyup="$emit('onEditItem', item)" @blur="setEditItemId(null);">
           </td>
           <td class="priority">
             <p :class="['priority-' + item.priority]" v-show="editItemId !== item.id" @click="setEditItemId(item.id)"><span>{{ priority[item.priority] }}</span></p>
-            <select v-model="item.priority" v-show="editItemId === item.id" @change="$emit('onEditItem', item); setEditItemId(null);">
+            <select v-model="item.priority" v-show="editItemId === item.id" @change="$emit('onEditItem', item); setEditItemId(null);" @blur="setEditItemId(null);">
               <option disabled="disabled" value="undefined">Priority...</option>
               <option v-for="(item, index) in priority" :key="index" :value="index">{{ item }}</option>
             </select>
@@ -95,7 +95,7 @@ table{
   border-collapse: collapse;
   width: 100%;
   max-width: 960px;
-  background: #dfe6e9;
+  background: #eaeaea;;
 }
 th{
   text-align: center;
@@ -135,6 +135,8 @@ tr{
   border: 2px solid #fff;
 }
 .add-item-row{
+  // Visibility still leaves a gap on iOS safari, height doesn't work,
+  // line-height doesn't work. Need to find solution!
   visibility: collapse;
 
   &.add-item-active{
