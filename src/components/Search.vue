@@ -1,10 +1,16 @@
 <template>
   <div class="search">
     <div>
+
       <label>
         <i class="fas fa-search"></i>
-        <input type="text" v-model="query" @keyup="$emit('onSearchChange', query)" placeholder="Search...">
+        <input
+          type="text"
+          v-model="query"
+          @keyup="$emit('onSearchChange', query)"
+          placeholder="Search...">
       </label>
+
     </div>
   </div>
 </template>
@@ -16,8 +22,7 @@ export default {
     return {
       query: null
     }
-  },
-  methods: {}
+  }
 }
 </script>
 
