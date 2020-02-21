@@ -1,13 +1,41 @@
 // https://docs.cypress.io/api/introduction/api.html
 
-describe('My First Test', () => {
+describe('Todo List', () => {
   beforeEach(() => {
     cy.visit('/');
   });
+
   it('Visits the app root url', () => {
-    cy.contains('h1', 'Todo List');
+    cy.contains('h1', 'Todo');
   });
-  it('Retrieves the todo list from local storage', () => {
+
+  it('Stores the list in local storage', () => {
     cy.expect(localStorage.getItem('todoList')).to.exist;
+  });
+
+  it('Removes an item from the list', () => {
+    // 3 items, with table header row and hidden add item row
+    cy.get('.list table').find('tr').should('have.length', 5)
+    cy.get('.remove i').last().click()
+    cy.get('.list table').find('tr').should('have.length', 4)
+  });
+
+  it('Clears all items from the list', () => {
+    cy.get('.list table').find('tr').should('have.length', 5)
+    cy.get('.clear-all i').last().click()
+    // 2 allows for the table header and hidden add item row
+    cy.get('.list table').find('tr').should('have.length', 2)
+  });
+
+  it('Orders by priority', () => {
+    cy.get('.priority span').last().then((span) => {
+      const text = span.text()
+      expect(text).to.equal('Meh')
+    })
+    cy.get('.priority-toggle').click()
+    cy.get('.priority span').last().then((span) => {
+      const text = span.text()
+      expect(text).to.equal('Life changing')
+    })
   });
 })
