@@ -150,6 +150,7 @@ tr{
     border: none;
     background: none;
     width: calc(100% - 20px);
+    text-overflow: ellipsis;
   }
 }
 .priority{
