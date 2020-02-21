@@ -28,7 +28,7 @@ export default {
       list: [],
       nextUniqueId: null,
       filteredList: null,
-      priority: ['Low', 'Medium', 'High'],
+      priority: ['Meh', 'Important', 'Life changing'],
       searchQuery: null,
       newItem: {},
       currentSort: true
@@ -139,7 +139,7 @@ body {
   color: #2c3e50;
   margin: 0;
   padding: 40px;
-  background: whitesmoke;
+  background: #b2bec3;
 }
 #app{
   margin: 0 auto;

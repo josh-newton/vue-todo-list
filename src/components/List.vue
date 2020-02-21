@@ -11,10 +11,10 @@
       <tbody>
         <tr class="add-item-row" :class="{'add-item-active': addItemActive}">
           <td>
-            <input type="text" v-model="newItem.text" placeholder="New todo...">
+            <input type="text" v-model="newItem.text" placeholder="New todo..." @change="validateNewItem()">
           </td>
           <td class="priority">
-            <select v-model="newItem.priority" @change="$emit('onAddNewItem', newItem); setAddItemActive(false); setNewItem({});">
+            <select v-model="newItem.priority" @change="validateNewItem()">
               <option disabled="disabled" selected="selected" value="undefined">Priority...</option>
               <option v-for="(item, index) in priority" :key="index" :value="index">{{ item }}</option>
             </select>
@@ -29,7 +29,7 @@
             <input type="text" v-model="item.text" @keyup="$emit('onEditItem', item)">
           </td>
           <td class="priority">
-            <p :class="['priority-' + item.priority]" v-show="editItemId !== item.id" @click="setEditItemId(item.id);">{{ priority[item.priority] }}</p>
+            <p :class="['priority-' + item.priority]" v-show="editItemId !== item.id" @click="setEditItemId(item.id)">{{ priority[item.priority] }}</p>
             <select v-model="item.priority" v-show="editItemId === item.id" @change="$emit('onEditItem', item); setEditItemId(null);">
               <option disabled="disabled" value="undefined">Priority...</option>
               <option v-for="(item, index) in priority" :key="index" :value="index">{{ item }}</option>
@@ -68,6 +68,13 @@ export default {
       setTimeout(() => {
         value === true ? document.querySelector('.add-item-row input[type="text"]').focus() : false;
       })
+    },
+    validateNewItem() {
+      if (this.newItem.text !== '' && this.newItem.text !== undefined && this.newItem.priority !== undefined){
+        this.$emit('onAddNewItem', this.newItem);
+        this.setAddItemActive(false);
+        this.setNewItem({});
+      }
     }
   }
 }
@@ -88,11 +95,15 @@ table{
   border-collapse: collapse;
   width: 100%;
   max-width: 960px;
+  background: #dfe6e9;
 }
 th{
   text-align: center;
   padding: 10px 15px;
   border: 2px solid #fff;
+  border-radius: 4px;
+  background: #2c3e50;
+  color: #fff;
 
   &:first-child{
     text-align: left;
@@ -101,6 +112,7 @@ th{
 td{
   padding: 0 5px;
   border: 2px solid #fff;
+  border-radius: 4px;
 
   input, select{
     padding: 8px;
@@ -109,7 +121,7 @@ td{
     background: none;
   }
   select{
-    width: 102px;
+    width: 122px;
     padding: 4px;
     background: #fff;
     margin: 10px 0;
@@ -141,7 +153,7 @@ tr{
   p {
     padding: 3px;
     border-radius: 4px;
-    max-width: 100px;
+    max-width: 120px;
     margin: 10px auto;
     cursor: pointer;
   }
