@@ -36,6 +36,7 @@ label{
     padding: 8px;
     border-radius: 4px;
     border: none;
+    font-size: 14px;
   }
 }
 </style>

@@ -3,23 +3,31 @@
     <div class="header">
       <h1>Todo List</h1>
     </div>
-    <Search @onSearchChange="onSearchChange"/>
-    <List
-      :list="filteredList"
-      :priority="priority"
-      :sort="currentSort"
-      @onAddNewItem="addNewItem"
-      @onEditItem="editItem"
-      @onRemoveItem="removeItem"
-      @onClearAll="clearAll"
-      @onToggleSort="toggleSort"
-    />
+    <div class="flex">
+      <Search @onSearchChange="onSearchChange"/>
+      <List
+        :list="filteredList"
+        :priority="priority"
+        :sort="currentSort"
+        @onAddNewItem="addNewItem"
+        @onEditItem="editItem"
+        @onRemoveItem="removeItem"
+        @onClearAll="clearAll"
+        @onToggleSort="toggleSort"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 import Search from './components/Search.vue'
 import List from './components/List.vue'
+
+const DEFAULT_LIST = [
+  { id: 0, text: 'Call Mum', priority: 0 },
+  { id: 1, text: 'Find a new job', priority: 2 },
+  { id: 2, text: 'Go to the pub', priority: 1 },
+];
 
 export default {
   name: 'App',
@@ -113,12 +121,7 @@ export default {
   },
   created: function() {
     const local = JSON.parse(localStorage.getItem('todoList')) || [];
-    const defaultList = [
-      { id: 0, text: 'Josh', priority: 0 },
-      { id: 1, text: 'Clare', priority: 2 },
-      { id: 2, text: 'Catherine', priority: 1 },
-    ];
-    const list = local.length > 0 ? local : defaultList;
+    const list = local.length > 0 ? local : DEFAULT_LIST;
 
     const highestId = list.reduce((max, item) => item.id >= max.id ? item : max).id;
     this.setNextUniqueId(highestId);

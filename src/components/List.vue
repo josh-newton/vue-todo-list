@@ -29,7 +29,7 @@
             <input type="text" v-model="item.text" @keyup="$emit('onEditItem', item)">
           </td>
           <td class="priority">
-            <p :class="['priority-' + item.priority]" v-show="editItemId !== item.id" @click="setEditItemId(item.id)">{{ priority[item.priority] }}</p>
+            <p :class="['priority-' + item.priority]" v-show="editItemId !== item.id" @click="setEditItemId(item.id)"><span>{{ priority[item.priority] }}</span></p>
             <select v-model="item.priority" v-show="editItemId === item.id" @change="$emit('onEditItem', item); setEditItemId(null);">
               <option disabled="disabled" value="undefined">Priority...</option>
               <option v-for="(item, index) in priority" :key="index" :value="index">{{ item }}</option>
@@ -114,17 +114,21 @@ td{
   border: 2px solid #fff;
   border-radius: 4px;
 
-  input, select{
+  input,{
     padding: 8px;
     border-radius: 4px;
     border: none;
     background: none;
+    width: calc(100% - 20px);
+    font-size: 14px;
   }
   select{
+    font-size: 14px;
     width: 122px;
     padding: 4px;
     background: #fff;
     margin: 10px 0;
+    border-radius: 4px;
   }
 }
 tr{
@@ -143,7 +147,7 @@ tr{
     border-radius: 4px;
     border: none;
     background: none;
-    min-width: 100px;
+    width: calc(100% - 20px);
   }
 }
 .priority{
@@ -170,5 +174,16 @@ tr{
 .remove{
   text-align: center;
   padding: 0 15px;
+}
+
+@media screen and (max-width: 600px) {
+  .priority span{
+    display: none;
+  }
+  .priority p{
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+  }
 }
 </style>
