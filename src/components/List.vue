@@ -1,38 +1,86 @@
 <template>
   <div class="list">
-    <ul>
-      <li v-for="(item, index) in list" :key="index" @click="removeItem(index);">{{ item }}</li>
-    </ul>
+    <table>
+      <thead>
+        <tr>
+          <th>ITEM <i class="far fa-plus-square add-item"></i></th>
+          <th class="priority-toggle" @click="$emit('onToggleSort')">PRIORITY <i class="fas" :class="{'fa-sort-up': !sort, 'fa-sort-down': sort}"></i></th>
+          <th class="clear-all" @click="$emit('onClearAll')">CLEAR</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="add-item-row">
+          <td>
+            <input type="text" v-model="newItem.text" placeholder="New todo...">
+          </td>
+          <td>
+            <select v-model="newItem.priority">
+              <option default disabled="disabled" selected="selected" value="undefined">Priority...</option>
+              <option v-for="(item, index) in priority" :key="index" :value="index">{{ item }}</option>
+            </select>
+          </td>
+          <td></td>
+        </tr>
+
+        <tr v-for="item in list" :key="item.id">
+          <td>
+            <input type="text" v-model="item.text" @keyup="editItem(item)">
+          </td>
+          <td class="priority">
+            <p :class="['priority-' + item.priority]">{{ priority[item.priority] }}</p>
+          </td>
+          <td class="remove">
+            <i class="fas fa-times" @click="$emit('onRemoveItem', item.id)"></i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
 <script>
 export default {
   name: 'List',
-  props: ['list'],
+  props: ['list', 'priority', 'sort'],
   data: () => {
-
-  }
-  methods: {
-    removeItem(index) {
-      this.list.splice(index, 1);
+    return {
+      newItem: {}
     }
-  }
+  },
+  methods: {}
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-ul {
-  list-style-type: none;
-  padding: 0;
+.add-item, .remove i, .priority-toggle, .clear-all{
+  cursor: pointer;
 }
-
-li {
-  padding: 10px;
+.add-item-row{
+  input, select{
+    padding: 8px;
+    border-radius: 4px;
+    border: none;
+    background: #fff;
+  }
 }
-
-a {
-  color: #42b983;
+.priority{
+  text-align: center;
+  color: #fff;
+  p {
+    padding: 3px;
+    border-radius: 4px;
+  }
+  .priority-0{
+    background: #fdcb6e;
+  }
+  .priority-1{
+    background: #e17055;
+  }
+  .priority-2{
+    background: #d63031;
+  }
+}
+.remove{
+  text-align: center;
 }
 </style>

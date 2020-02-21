@@ -3,9 +3,10 @@
     <div class="header">
       <h1>Todo List</h1>
     </div>
+    <Search @onSearchChange="onSearchChange"/>
+    <List :list="filteredList" :priority="priority" @onRemoveItem="removeItem" @onClearAll="clearAll" @onToggleSort="toggleSort" :sort="currentSort"/>
     <div class="todos">
       <div class="list-modifiers">
-        <p><input type="text" v-model="searchQuery" placeholder="search"></p>
         <p @click="orderByPriorityAsc();">Order by priority Asc</p>
         <p @click="orderByPriorityDesc();">Order by priority Desc</p>
         <p @click="clearAll();">Clear List</p>
@@ -36,29 +37,31 @@
 </template>
 
 <script>
-// import List from './components/List.vue'
+import Search from './components/Search.vue'
+import List from './components/List.vue'
 
 export default {
   name: 'App',
   data: () => {
     return {
       list: [],
-      idIncrement: null,
+      nextUniqueId: null,
       filteredList: null,
       priority: ['Low', 'Medium', 'High'],
       searchQuery: null,
-      newItem: {}
+      newItem: {},
+      currentSort: true
     }
   },
-  watch: {
-    searchQuery(query) {
-      this.filterBySearch(query);
-    }
-  },
+  watch: {},
   components: {
-    // List
+    Search,
+    List,
   },
   methods: {
+    onSearchChange(query) {
+      this.filterBySearch(query);
+    },
     setLocalStorage(list) {
       localStorage.setItem('todoList', JSON.stringify(list));
     },
@@ -72,8 +75,8 @@ export default {
     },
     addNewItem() {
       let list = this.list;
-      this.idIncrement += 1;
-      this.newItem.id = this.idIncrement;
+      this.newItem.id = this.nextUniqueId;
+      this.nextUniqueId += 1;
       list.push(this.newItem);
       this.setList(list);
       this.setNewItem({});
@@ -89,9 +92,19 @@ export default {
       list[listItem] = item;
       this.setList(list);
     },
+    setNextUniqueId(val) {
+      this.nextUniqueId = val;
+    },
+    incrementNextUniqueId() {
+      this.nextUniqueId +=1 ;
+    },
     updateFilteredList(list) {
       this.filteredList = list;
       this.filterBySearch(this.searchQuery);
+    },
+    toggleSort() {
+      this.currentSort === false ? this.filteredList.sort((a, b) => a.priority - b.priority) : this.filteredList.sort((a, b) => b.priority - a.priority);
+      this.currentSort = !this.currentSort;
     },
     orderByPriorityAsc() {
       this.filteredList.sort((a, b) => a.priority - b.priority);
@@ -121,17 +134,19 @@ export default {
       { id: 2, text: 'Catherine', priority: 1 },
     ];
     const list = local.length > 0 ? local : defaultList;
-    this.idIncrement = list.reduce((max, item) => {
-        return item.id >= max.id ? item : max;
-    }).id;
+
+    const highestId = list.reduce((max, item) => item.id >= max.id ? item : max).id;
+    this.setNextUniqueId(highestId);
+
     this.setList(list);
   }
 }
 </script>
 
 <style lang="scss">
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css');
+@import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
 body {
-  @import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
   font-family: 'Raleway', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
