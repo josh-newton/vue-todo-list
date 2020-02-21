@@ -23,6 +23,7 @@ export default {
 .search{
   display: flex;
   justify-content: flex-end;
+  margin-bottom: 30px;
 }
 label{
   display: flex;

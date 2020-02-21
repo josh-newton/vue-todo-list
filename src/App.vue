@@ -4,8 +4,16 @@
       <h1>Todo List</h1>
     </div>
     <Search @onSearchChange="onSearchChange"/>
-    <List :list="filteredList" :priority="priority" @onRemoveItem="removeItem" @onClearAll="clearAll" @onToggleSort="toggleSort" :sort="currentSort"/>
-    <div class="todos">
+    <List
+      :list="filteredList"
+      :priority="priority"
+      :sort="currentSort"
+      @onEditItem="editItem"
+      @onRemoveItem="removeItem"
+      @onClearAll="clearAll"
+      @onToggleSort="toggleSort"
+    />
+    <!-- <div class="todos">
       <div class="list-modifiers">
         <p @click="orderByPriorityAsc();">Order by priority Asc</p>
         <p @click="orderByPriorityDesc();">Order by priority Desc</p>
@@ -32,7 +40,7 @@
           </div>
         </li>
       </ul>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -157,72 +165,10 @@ body {
 }
 #app{
   margin: 0 auto;
-
 }
 h1{
   text-align: left;
 }
-
-.todos{
-  display: flex;
-  flex-direction: column;
-
-  .list-modifiers{
-    width: 50%;
-    align-self: flex-end;
-    display: flex;
-    justify-content: space-around;
-  }
-
-  ul.list {
-    list-style-type: none;
-    padding: 0;
-    background: white;
-    margin-top: 0;
-
-    li {
-      display: flex;
-      align-items: center;
-      padding: 20px;
-
-      &:last-child{
-        border-bottom: none;
-      }
-
-      .text{
-        width: 80%;
-      }
-
-      .edit{
-        width: 20%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-      .priority p{
-        padding: 0 5px;
-        display: inline-block;
-        color: white;
-        margin: 0;
-        border-radius: 4px;
-        text-align: center;
-
-        &.priority-0{
-          background: green;
-        }
-        &.priority-1{
-          background: yellow;
-          color: black;
-        }
-        &.priority-2{
-          background: red;
-        }
-      }
-    }
-  }
-}
-
-
 a {
   color: #42b983;
 }
