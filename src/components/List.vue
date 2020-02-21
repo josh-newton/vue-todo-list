@@ -41,6 +41,7 @@
         </tr>
       </tbody>
     </table>
+    <p v-if="list.length === 0">Well done! You've completed all your todos.</p>
   </div>
 </template>
 
@@ -84,6 +85,7 @@ export default {
 .list{
   display: flex;
   justify-content: center;
+  flex-direction: column;
 }
 .add-item{
   margin-left: 5px;

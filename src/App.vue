@@ -48,7 +48,11 @@ export default {
     List,
   },
   methods: {
+    setSearchQuery(query) {
+      this.searchQuery = query;
+    },
     onSearchChange(query) {
+      this.setSearchQuery(query);
       this.filterBySearch(query);
     },
     setLocalStorage(list) {
