@@ -8,39 +8,12 @@
       :list="filteredList"
       :priority="priority"
       :sort="currentSort"
+      @onAddNewItem="addNewItem"
       @onEditItem="editItem"
       @onRemoveItem="removeItem"
       @onClearAll="clearAll"
       @onToggleSort="toggleSort"
     />
-    <!-- <div class="todos">
-      <div class="list-modifiers">
-        <p @click="orderByPriorityAsc();">Order by priority Asc</p>
-        <p @click="orderByPriorityDesc();">Order by priority Desc</p>
-        <p @click="clearAll();">Clear List</p>
-      </div>
-      <div class="add">
-        <form @submit.prevent="addNewItem">
-          <input type="text" v-model="newItem.text" placeholder="New todo...">
-          <select v-model="newItem.priority">
-            <option default disabled="disabled" selected="selected" value="undefined">Priority...</option>
-            <option v-for="(item, index) in priority" :key="index" :value="index">{{ item }}</option>
-          </select>
-          <input type="submit" value="submit">
-        </form>
-      </div>
-      <ul class="list">
-        <li v-for="item in filteredList" :key="item.id" :yo="item.id">
-          <div class="text">
-            <input type="text" v-model="item.text" @keyup="editItem(item)">
-          </div>
-          <div class="edit">
-            <div class="priority"><p :class="['priority-' + item.priority]">{{ priority[item.priority] }}</p></div>
-            <div class="delete" @click="removeItem(item.id);"><p>Delete</p></div>
-          </div>
-        </li>
-      </ul>
-    </div> -->
   </div>
 </template>
 
@@ -81,13 +54,14 @@ export default {
     setNewItem(item) {
       this.newItem = item;
     },
-    addNewItem() {
+    addNewItem(newItem) {
       let list = this.list;
-      this.newItem.id = this.nextUniqueId;
-      this.nextUniqueId += 1;
-      list.push(this.newItem);
+      newItem.id = this.nextUniqueId;
+      this.incrementNextUniqueId();
+      list.push(newItem);
       this.setList(list);
       this.setNewItem({});
+      this.setSort(this.currentSort);
     },
     removeItem(id) {
       let list = this.list;
@@ -111,8 +85,11 @@ export default {
       this.filterBySearch(this.searchQuery);
     },
     toggleSort() {
+      this.setSort(!this.currentSort);
+    },
+    setSort(sort) {
+      this.currentSort = sort;
       this.currentSort === false ? this.filteredList.sort((a, b) => a.priority - b.priority) : this.filteredList.sort((a, b) => b.priority - a.priority);
-      this.currentSort = !this.currentSort;
     },
     orderByPriorityAsc() {
       this.filteredList.sort((a, b) => a.priority - b.priority);
@@ -145,6 +122,7 @@ export default {
 
     const highestId = list.reduce((max, item) => item.id >= max.id ? item : max).id;
     this.setNextUniqueId(highestId);
+    this.incrementNextUniqueId();
 
     this.setList(list);
   }
@@ -171,5 +149,8 @@ h1{
 }
 a {
   color: #42b983;
+}
+input{
+  font-family: 'Raleway', sans-serif;
 }
 </style>

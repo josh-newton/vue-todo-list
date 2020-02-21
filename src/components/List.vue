@@ -14,8 +14,8 @@
             <input type="text" v-model="newItem.text" placeholder="New todo...">
           </td>
           <td class="priority">
-            <select v-model="newItem.priority">
-              <option default disabled="disabled" selected="selected" value="undefined">Priority...</option>
+            <select v-model="newItem.priority" @change="$emit('onAddNewItem', newItem); setAddItemActive(false); setNewItem({});">
+              <option disabled="disabled" selected="selected" value="undefined">Priority...</option>
               <option v-for="(item, index) in priority" :key="index" :value="index">{{ item }}</option>
             </select>
           </td>
@@ -29,7 +29,11 @@
             <input type="text" v-model="item.text" @keyup="$emit('onEditItem', item)">
           </td>
           <td class="priority">
-            <p :class="['priority-' + item.priority]">{{ priority[item.priority] }}</p>
+            <p :class="['priority-' + item.priority]" v-show="editItemId !== item.id" @click="setEditItemId(item.id);">{{ priority[item.priority] }}</p>
+            <select v-model="item.priority" v-show="editItemId === item.id" @change="$emit('onEditItem', item); setEditItemId(null);">
+              <option disabled="disabled" value="undefined">Priority...</option>
+              <option v-for="(item, index) in priority" :key="index" :value="index">{{ item }}</option>
+            </select>
           </td>
           <td class="remove">
             <i class="fas fa-times" @click="$emit('onRemoveItem', item.id)"></i>
@@ -47,16 +51,23 @@ export default {
   data: () => {
     return {
       newItem: {},
-      addItemActive: false
+      addItemActive: false,
+      editItemId: null
     }
   },
   methods: {
+    setEditItemId(id) {
+      this.editItemId = id;
+    },
     setNewItem(item) {
       this.newItem = item;
     },
     setAddItemActive(value) {
-      console.log('here');
       this.addItemActive = value;
+      // Wait for input to display before setting focus
+      setTimeout(() => {
+        value === true ? document.querySelector('.add-item-row input[type="text"]').focus() : false;
+      })
     }
   }
 }
@@ -90,6 +101,19 @@ th{
 td{
   padding: 0 5px;
   border: 2px solid #fff;
+
+  input, select{
+    padding: 8px;
+    border-radius: 4px;
+    border: none;
+    background: none;
+  }
+  select{
+    width: 102px;
+    padding: 4px;
+    background: #fff;
+    margin: 10px 0;
+  }
 }
 tr{
   border: 2px solid #fff;
@@ -99,12 +123,6 @@ tr{
 
   &.add-item-active{
     visibility: visible;
-  }
-  input, select{
-    padding: 8px;
-    border-radius: 4px;
-    border: none;
-    background: #fff;
   }
 }
 .text{
@@ -125,6 +143,7 @@ tr{
     border-radius: 4px;
     max-width: 100px;
     margin: 10px auto;
+    cursor: pointer;
   }
   .priority-0{
     background: #fdcb6e;
