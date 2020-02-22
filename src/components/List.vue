@@ -22,10 +22,10 @@
 
       <tbody>
         <!-- Hidden add item row -->
-        <tr class="add-new-row" :class="{'add-new-active': addItemActive}">
+        <tr class="add-new-row" v-if="addItemActive">
           <td>
             <input
-              type="item-text"
+              type="text"
               placeholder="New todo..."
               v-model="newItem.text"
               @change="validateNewItem()"/>
@@ -194,15 +194,6 @@ table{
 }
 .add-new-button{
   margin-left: 5px;
-}
-.add-new-row{
-  // Visibility still leaves a gap on iOS safari, height doesn't work,
-  // line-height doesn't work. Need to find solution!
-  visibility: collapse;
-
-  &.add-new-active{
-    visibility: visible;
-  }
 }
 .item-text{
   input{
