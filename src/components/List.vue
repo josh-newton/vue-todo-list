@@ -233,13 +233,18 @@ table{
 
 @media screen and (max-width: 600px) {
   // Reduce priority options to coloured circles on mobile devices
-  .priority span{
+  .item-priority span{
     display: none;
   }
-  .priority p{
+  .item-priority p{
     width: 15px;
     height: 15px;
     border-radius: 50%;
+  }
+  .add-new-row{
+    select{
+      width: auto;
+    }
   }
 }
 </style>
